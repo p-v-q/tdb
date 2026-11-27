@@ -1,0 +1,13 @@
+.git
+.github
+.artifacts
+.dbs
+.gocache
+.gopath
+.gotmp
+.tools
+.itest
+bin
+docs
+tdb
+*.exe

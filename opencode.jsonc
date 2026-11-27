@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // ─────────────────────────────────────────────────────────────
+  //  TDB 多 Agent 团队配置
+  //
+  //  角色（定义在 .opencode/agents/*.md，Markdown 正文 = system prompt）：
+  //    architect        架构师 / 总控   —— primary，接需求、拆任务、派活、验收
+  //    senior-dev       高级开发        —— 复杂特性 / 跨模块重构
+  //    dev              开发            —— 边界清晰的小特性 / 缺陷修复
+  //    senior-qa        高级测试        —— 测试策略、竞态与边界用例
+  //    qa               测试            —— 跑套件、补回归用例、出报告
+  //    code-reviewer    代码审查        —— 只读审查，不改代码
+  //    security-auditor 安全审计        —— 只读审计凭据/注入/日志泄漏
+  //    docs-writer      文档            —— README / docs / 变更说明
+  //    release-manager  发布            —— 版本、CHANGELOG、CI 一致性
+  //
+  //  模型映射（model 字段只能写一个 ID，不支持自动 fallback）：
+  //  注意 provider ID 是 xiaomi，不是 mimo —— 写成 mimo/… 会匹配不到模型。
+  //    架构师/审查/安全 = 判断型   → xiaomi/mimo-v2.6-pro
+  //    开发/测试/文档/发布 = 执行型 → xiaomi/mimo-v2.6-flash
+  //  xiaomi 现有三个模型（均 active，且都无 #variant）：
+  //    xiaomi/mimo-v2.6-pro / xiaomi/mimo-v2.6-flash / xiaomi/mimo-v2.6-pro-ultraspeed
+  //  想临时换更快的执行模型，把某个 agent 的 model 改成 pro-ultraspeed 即可。
+  //  要换成 Claude：先配置 anthropic provider，再把各 agent 的 model 一行替换。
+  // ─────────────────────────────────────────────────────────────
+
+  // 全局默认模型：会话未选模型时用它（架构师级别，分析类工作占多数）
+  "model": "xiaomi/mimo-v2.6-pro",
+
+  // 打开项目默认就是架构师，由它派活给其他人
+  "default_agent": "architect",
+
+  // 团队级基线约束：先匹配到这里的规则，再匹配各 agent 自己的规则（后者生效）
+  "permissions": [
+    // 全员默认禁止：远程推送、递归删除、改写 git 历史
+    { "action": "shell", "resource": "git push*", "effect": "deny" },
+    { "action": "shell", "resource": "git reset --hard*", "effect": "deny" },
+    { "action": "shell", "resource": "git clean*", "effect": "deny" },
+    { "action": "shell", "resource": "rm -rf*", "effect": "deny" },
+    // 全员默认询问：其他 shell 命令、写工作区之外的文件
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "edit", "resource": "~/**", "effect": "ask" },
+    // 凭据类文件一律先问
+    { "action": "read", "resource": "**/.env*", "effect": "ask" },
+    { "action": "read", "resource": "**/*.pem", "effect": "ask" },
+    { "action": "read", "resource": "**/credentials*", "effect": "ask" }
+  ]
+}

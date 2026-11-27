@@ -1,0 +1,24 @@
+# 构建产物
+/bin/
+/tdb
+*.test
+*.out
+
+# 集成测试的本地环境：下载的数据库、Go 缓存、截图与日志
+/_site/
+/.dbs/
+/.artifacts/
+/.tools/
+/.gocache/
+/.gopath/
+/.gotmp/
+
+# 测试辅助模块的构建产物
+/.itest/**/*.exe
+
+# 编辑器与系统文件
+.DS_Store
+.idea/
+.vscode/
+
+/tdb

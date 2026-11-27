@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: make check
+      - run: make race
+
+  # The driver integration tests are guarded by environment variables: with the
+  # DSNs set below, the PostgreSQL and MySQL suites run against real servers
+  # instead of skipping themselves.
+  integration:
+    name: integration (postgres, mysql)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: tdb
+          POSTGRES_PASSWORD: tdb
+          POSTGRES_DB: tdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tdb -d tdb"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: tdb
+          MYSQL_DATABASE: tdb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -ptdb"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # The PostgreSQL DSN is a libpq URL; sslmode=disable is enough for the
+      # throwaway service container.
+      TDB_POSTGRES_DSN: postgres://tdb:tdb@127.0.0.1:5432/tdb?sslmode=disable
+      # The MySQL DSN is the driver's own format (user:pass@tcp(host:port)/db).
+      # parseTime=true asks the driver for real time values; the driver sets the
+      # same default on its own.
+      TDB_MYSQL_DSN: root:tdb@tcp(127.0.0.1:3306)/tdb?parseTime=true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      # MySQL 8 writes a binary log by default and refuses a stored function
+      # that declares neither DETERMINISTIC nor NO SQL (error 1418). The
+      # integration test creates a plain function, so the server is told to
+      # trust the function creators first.
+      - name: Prepare MySQL
+        run: |
+          if command -v mysql >/dev/null 2>&1; then
+            mysql -h 127.0.0.1 -P 3306 -uroot -ptdb \
+              -e "SET GLOBAL log_bin_trust_function_creators = 1"
+          else
+            docker exec -e MYSQL_PWD=tdb \
+              "$(docker ps -q --filter ancestor=mysql:8 | head -n 1)" \
+              mysql -uroot -e "SET GLOBAL log_bin_trust_function_creators = 1"
+          fi
+      - name: Integration tests
+        run: go test -count=1 ./...

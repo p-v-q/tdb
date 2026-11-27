@@ -1,0 +1,12 @@
+# The repository stores text as LF on every platform (see .editorconfig). Without
+# this a Windows checkout materialises CRLF and `gofmt -l` flags every Go file,
+# which would make the documented `make check` fail on Windows while passing in CI.
+* text=auto eol=lf
+*.go text eol=lf
+*.png binary
+*.gif binary
+*.jpg binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.exe binary

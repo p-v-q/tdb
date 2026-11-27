@@ -1,0 +1,191 @@
+name: Release
+
+# Build the archives and the multi-arch container image, then publish them when
+# a version tag is pushed. The tag is the input: v0.9.0 ->
+# tdb_0.9.0_linux_amd64.tar.gz and friends, plus ghcr.io/p-v-q/tdb:0.9.0.
+#
+# A manual run is also supported: pick "Run workflow" and enter an existing tag.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release (for example v0.9.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+
+jobs:
+  check:
+    name: release gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Check the tag matches the version constant
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(grep -oP 'const version = "\K[^"]+' cmd/tdb/main.go)"
+          test "v${version}" = "${RELEASE_TAG}" || {
+            echo "tag ${RELEASE_TAG} does not match cmd/tdb/main.go version ${version}"
+            exit 1
+          }
+      - name: Format, vet and unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          files="$(gofmt -l $(go list -f '{{.Dir}}' ./...))"
+          test -z "${files}" || { echo "gofmt needed:"; echo "${files}"; exit 1; }
+          go vet ./...
+          go test -count=1 ./...
+
+  build:
+    name: build ${{ matrix.goos }}/${{ matrix.goarch }}
+    needs: check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+          - goos: windows
+            goarch: arm64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          name="tdb_${version}_${{ matrix.goos }}_${{ matrix.goarch }}"
+          mkdir -p "dist/${name}"
+          # CGO_ENABLED=0 keeps the binary static: SQLite is the pure-Go
+          # modernc.org/sqlite driver, so no libc is needed at runtime.
+          CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+            go build -trimpath -buildvcs=false \
+            -o "dist/${name}/tdb${{ matrix.goos == 'windows' && '.exe' || '' }}" \
+            ./cmd/tdb
+          cp README.md LICENSE CHANGELOG.md "dist/${name}/"
+          cd dist
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            zip -r "${name}.zip" "${name}"
+            rm -rf "${name}"
+          else
+            tar -czf "${name}.tar.gz" "${name}"
+            rm -rf "${name}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/*
+          if-no-files-found: error
+
+  image:
+    name: image (linux/amd64, linux/arm64)
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - name: Version without the v prefix
+        id: version
+        shell: bash
+        run: echo "value=${RELEASE_TAG#v}" >> "${GITHUB_OUTPUT}"
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ steps.version.outputs.value }}
+            type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  publish:
+    name: publish
+    needs:
+      - build
+      - image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # Only the six per-OS/arch archives; BuildKit also stores its GHA
+          # cache as an artifact, and downloading that as release data fails.
+          pattern: release-*
+          path: dist
+          merge-multiple: true
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+      - name: Delete previous release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release view "${RELEASE_TAG}" --json assets --jq '.assets[].name' |
+              while IFS= read -r asset; do
+                [ -z "${asset}" ] || gh release delete-asset "${RELEASE_TAG}" "${asset}" --yes
+              done
+          fi
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: TDB ${{ env.RELEASE_TAG }}
+          files: |
+            dist/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(env.RELEASE_TAG, '-') }}
