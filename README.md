@@ -50,11 +50,11 @@ first:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/p-v-q/tdb/main/install.sh -o /tmp/tdb-install.sh
-TDB_VERSION=0.9.1 TDB_INSTALL_DIR="$HOME/bin" sh /tmp/tdb-install.sh
+TDB_VERSION=0.9.2 TDB_INSTALL_DIR="$HOME/bin" sh /tmp/tdb-install.sh
 ```
 
 ```powershell
-$env:TDB_VERSION = "0.9.1"
+$env:TDB_VERSION = "0.9.2"
 $env:TDB_INSTALL_DIR = "$HOME\bin"
 irm https://raw.githubusercontent.com/p-v-q/tdb/main/install.ps1 -OutFile install.ps1
 .\install.ps1
@@ -68,7 +68,7 @@ Assets are named `tdb_<version>_<os>_<arch>`, with `os` equal to
 **Linux (amd64 shown):**
 
 ```bash
-VERSION=0.9.1
+VERSION=0.9.2
 curl -LO "https://github.com/p-v-q/tdb/releases/download/v${VERSION}/tdb_${VERSION}_linux_amd64.tar.gz"
 tar -xzf "tdb_${VERSION}_linux_amd64.tar.gz"
 sudo install -m 0755 "tdb_${VERSION}_linux_amd64/tdb" /usr/local/bin/tdb
@@ -78,7 +78,7 @@ tdb -version
 **macOS (arm64 shown; use `darwin_amd64` on Intel):**
 
 ```bash
-VERSION=0.9.1
+VERSION=0.9.2
 curl -LO "https://github.com/p-v-q/tdb/releases/download/v${VERSION}/tdb_${VERSION}_darwin_arm64.tar.gz"
 tar -xzf "tdb_${VERSION}_darwin_arm64.tar.gz"
 sudo install -m 0755 "tdb_${VERSION}_darwin_arm64/tdb" /usr/local/bin/tdb
@@ -88,7 +88,7 @@ tdb -version
 **Windows (amd64 shown; use `windows_arm64` on ARM):**
 
 ```powershell
-$VERSION = "0.9.1"
+$VERSION = "0.9.2"
 $asset = "tdb_${VERSION}_windows_amd64.zip"
 Invoke-WebRequest "https://github.com/p-v-q/tdb/releases/download/v$VERSION/$asset" -OutFile $asset
 Expand-Archive $asset -DestinationPath .

@@ -20,8 +20,8 @@ pushed; this checklist is what has to be true before tagging.
 
 ## 2. Version and changelog
 
-- [ ] `cmd/tdb/main.go` `const version` matches the tag (v0.9.1 → `0.9.1`).
-- [ ] `CHANGELOG.md`: the `[Unreleased]` section became `## [0.9.1] - <date>`,
+- [ ] `cmd/tdb/main.go` `const version` matches the tag (v0.9.2 → `0.9.2`).
+- [ ] `CHANGELOG.md`: the `[Unreleased]` section became `## [0.9.2] - <date>`,
       a new empty `[Unreleased]` section sits above it, and the comparison links
       at the bottom point at the new tag.
 - [ ] `tdb -version` prints the new version after a rebuild.
@@ -47,9 +47,9 @@ pushed; this checklist is what has to be true before tagging.
       `windows/amd64`, `windows/arm64`.
 - [ ] Tag and push:
       ```bash
-      git tag -a v0.9.1 -m "TDB v0.9.1"
+      git tag -a v0.9.2 -m "TDB v0.9.2"
       git push origin main
-      git push origin v0.9.1
+      git push origin v0.9.2
       ```
       The tag push starts the release workflow: a `check` job verifies the tag
       matches `cmd/tdb/main.go` and runs gofmt/vet/unit tests, then the build

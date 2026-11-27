@@ -82,7 +82,7 @@
 向开源发布还需补齐（与功能路线正交）：
 
 - `LICENSE`（Apache-2.0）、`CODE_OF_CONDUCT.md`（`CONTRIBUTING.md`、`SECURITY.md` 已有）
-- `CHANGELOG.md` 与语义化版本发布流程（已完成：当前版本 0.9.1，CHANGELOG 按 Keep a Changelog 维护）
+- `CHANGELOG.md` 与语义化版本发布流程（已完成：当前版本 0.9.2，CHANGELOG 按 Keep a Changelog 维护）
 - CI 矩阵已补 PostgreSQL / MySQL 集成测试（`ci.yml` 的服务容器 + DSN 守卫）；独立的 PTY 场景套件仍需本地数据库，见 `docs/integration-testing.md`
 - 测试覆盖率门槛与 `golangci-lint`（仍待做）
 - README 截图 / 演示 GIF、架构文档（已完成：真实终端录制与 4 张截图）

@@ -6,6 +6,18 @@ All notable changes to TDB are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-11-27
+
+### Added
+
+- **Project page:** a static landing page in `site/`, published at
+  <https://p-v-q.github.io/tdb-site/> and refreshed with `make site-publish`.
+
+### Changed
+
+- **Public repository:** the source, issues and releases are public; the
+  landing page follows the feature tour in the README.
+
 ## [0.9.1] - 2026-11-27
 
 ### Added
@@ -15,7 +27,7 @@ All notable changes to TDB are documented here. The format follows
 ### Changed
 
 - **License:** TDB is now distributed under the Apache License 2.0; see `LICENSE` and `NOTICE`.
-- **Rename:** the binary, command directory, configuration directory and environment variables are now 	db, cmd/tdb, ~/.config/tdb and TDB_*; the old 	ermdb names are gone.
+- **Rename:** the binary, command directory, configuration directory and environment variables are now tdb, cmd/tdb, ~/.config/tdb and TDB_*; the old termdb names are gone.
 
 ### Fixed
 
@@ -558,7 +570,8 @@ Release highlights:
   reaches the application, so the pending changes could not be applied there.
   `Ctrl+Enter` (which the terminals send as `Ctrl+J`) applies them as well.
 
-[unreleased]: https://github.com/p-v-q/tdb/compare/v0.9.1...HEAD
+[unreleased]: https://github.com/p-v-q/tdb/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/p-v-q/tdb/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/p-v-q/tdb/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/p-v-q/tdb/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/p-v-q/tdb/compare/v0.7.0...v0.8.0

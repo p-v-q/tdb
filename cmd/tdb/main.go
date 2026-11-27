@@ -39,7 +39,7 @@ import (
 	"github.com/p-v-q/tdb/ui"
 )
 
-const version = "0.9.1"
+const version = "0.9.2"
 
 func main() {
 	// The language and the settings path are needed before flags are parsed so
