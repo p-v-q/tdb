@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TDB — a keyboard-first database client for the terminal</title>
+<meta name="description" content="Browse PostgreSQL, MySQL, MariaDB and SQLite from one Go binary, with SQL completion, editable result grids and an English or Simplified Chinese interface.">
+<meta name="theme-color" content="#0a0e13">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TDB — a keyboard-first database client for the terminal">
+<meta property="og:description" content="One Go binary for PostgreSQL, MySQL, MariaDB and SQLite: SQL completion, editable result grids, encrypted connections and two interface languages.">
+<meta property="og:url" content="https://p-v-q.github.io/tdb/">
+<meta property="og:image" content="https://p-v-q.github.io/tdb/img/postgres.png">
+<meta property="og:image:alt" content="TDB running a PostgreSQL session in a terminal.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://p-v-q.github.io/tdb/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="./" aria-label="TDB home">
+      <span class="brand-mark" aria-hidden="true">tdb<span class="brand-caret">_</span></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#install">Install</a>
+      <a href="#databases">Databases</a>
+      <a href="https://github.com/p-v-q/tdb#documentation">Docs</a>
+    </nav>
+    <a class="btn btn-small btn-ghost header-cta" href="https://github.com/p-v-q/tdb">GitHub</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap">
+    <p class="eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      v0.9 · pre-1.0 · Apache-2.0
+    </p>
+    <h1>The database client that lives in your terminal.</h1>
+    <p class="lede">
+      Browse PostgreSQL, MySQL, MariaDB and SQLite from one Go binary — with SQL
+      completion, editable result grids, and an interface in English or Simplified
+      Chinese.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/p-v-q/tdb/releases">Download</a>
+      <a class="btn btn-ghost" href="https://github.com/p-v-q/tdb">View on GitHub</a>
+    </div>
+    <p class="hero-note">Single binary · no server component · Windows, macOS and Linux</p>
+
+    <figure class="term" aria-label="Recorded terminal session of TDB">
+      <div class="term-bar" aria-hidden="true">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span class="term-title">tdb — demo catalog</span>
+      </div>
+      <img src="demo.gif" width="980" height="556" alt="TDB in a terminal: object browser, SQL editor with completion, sorted results and keyboard navigation.">
+    </figure>
+    <p class="caption">A real ConPTY recording, scripted by the integration-test harness.</p>
+  </section>
+
+  <section id="features" class="section wrap">
+    <div class="section-head">
+      <h2>Built for the keyboard, honest about the mouse.</h2>
+      <p>Every pane is reachable from the home row; the mouse works too.</p>
+    </div>
+
+    <div class="grid-4">
+      <article class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <ellipse cx="12" cy="5" rx="8" ry="3"></ellipse>
+          <path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path>
+          <path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path>
+        </svg>
+        <h3>Browse and write</h3>
+        <p>Capability-aware object trees, generated SQL for tables and views, and context-aware completion against the live catalog.</p>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+          <path d="M3 9h18M9 9v11M15 9v11"></path>
+        </svg>
+        <h3>Inspect results</h3>
+        <p>Sort, filter, resize and copy cells or rows. Export CSV, TSV, JSON or Markdown; scripts keep multiple result sets.</p>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"></path>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+        <h3>Edit safely</h3>
+        <p>Read-only mode, confirmations for risky statements, pending parameterized updates and manual transactions with commit or rollback.</p>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18M12 3c2.5 2.3 4 5.5 4 9s-1.5 6.7-4 9c-2.5-2.3-4-5.5-4-9s1.5-6.7 4-9z"></path>
+        </svg>
+        <h3>Work your way</h3>
+        <p>Saved connections, server-fed pickers, <code>passwordEnv</code>, an encrypted vault, named tabs, themes and two interface languages.</p>
+      </article>
+    </div>
+
+    <ul class="tick-list">
+      <li>Nerd Font icons by default, portable symbols when you turn them off</li>
+      <li>PBKDF2-HMAC-SHA256 + AES-256-GCM sealed connection list</li>
+      <li>CJK and emoji width aware — grid columns line up</li>
+      <li>Cancelable statements and a 1,000-row cap with a truncation notice</li>
+      <li>Offline demo catalog for trying the UI without a database</li>
+      <li>Dark and light themes, English and 简体中文</li>
+    </ul>
+  </section>
+
+  <section id="screenshots" class="section wrap">
+    <div class="section-head">
+      <h2>A tour, one pane at a time.</h2>
+      <p>Screenshots use CaskaydiaMono Nerd Font Mono.</p>
+    </div>
+
+    <div class="grid-2">
+      <figure class="shot">
+        <a href="img/postgres.png" target="_blank" rel="noopener" aria-label="Open the PostgreSQL screenshot at full size">
+          <img src="img/postgres.png" width="1416" height="856" loading="lazy" alt="PostgreSQL session with the object browser, SQL editor and sorted join results.">
+        </a>
+        <figcaption><strong>PostgreSQL</strong> — object browsing, SQL editing and sorted join results.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="img/connection-form.png" target="_blank" rel="noopener" aria-label="Open the connection form screenshot at full size">
+          <img src="img/connection-form.png" width="1416" height="856" loading="lazy" alt="PostgreSQL connection form with the server-provided database list open.">
+        </a>
+        <figcaption><strong>Connections</strong> — a new connection form with the database list open.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="img/mysql.png" target="_blank" rel="noopener" aria-label="Open the MySQL screenshot at full size">
+          <img src="img/mysql.png" width="1416" height="856" loading="lazy" alt="MySQL object browser showing databases, the Tables group and the customers table.">
+        </a>
+        <figcaption><strong>MySQL / MariaDB</strong> — object-browser navigation across databases.</figcaption>
+      </figure>
+      <figure class="shot">
+        <a href="img/chinese.png" target="_blank" rel="noopener" aria-label="Open the Simplified Chinese screenshot at full size">
+          <img src="img/chinese.png" width="1416" height="856" loading="lazy" alt="Simplified Chinese interface with a SQLite query and NULL-aware results.">
+        </a>
+        <figcaption><strong>简体中文</strong> — a SQLite query with NULL-aware results.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="install" class="section wrap">
+    <div class="section-head">
+      <h2>One binary. No server.</h2>
+      <p>Pick the archive for your OS, use Go, or run the container image.</p>
+    </div>
+
+    <div class="grid-3">
+      <article class="install-card">
+        <h3>Releases</h3>
+        <p>Linux, macOS or Windows, built with <code>CGO_ENABLED=0</code>.</p>
+        <a class="btn btn-small btn-primary" href="https://github.com/p-v-q/tdb/releases">Download an archive</a>
+      </article>
+
+      <article class="install-card">
+        <h3>With Go</h3>
+        <p>Use the version in <a href="https://github.com/p-v-q/tdb/blob/main/go.mod">go.mod</a> or newer.</p>
+        <div class="code">
+          <code>go install github.com/p-v-q/tdb/cmd/tdb@latest</code>
+          <button class="copy" type="button" data-copy aria-label="Copy the go install command">Copy</button>
+        </div>
+      </article>
+
+      <article class="install-card">
+        <h3>Container</h3>
+        <p>Published for linux/amd64 and linux/arm64.</p>
+        <div class="code">
+          <code>docker run --rm -it -v "$HOME/.config/tdb:/home/tdb/.config/tdb" ghcr.io/p-v-q/tdb:latest</code>
+          <button class="copy" type="button" data-copy aria-label="Copy the docker run command">Copy</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="quickstart">
+      <h3>Quick start</h3>
+      <pre><code>tdb                                      # offline demo catalog
+tdb -d sqlite -dsn shop.db               # open or create a SQLite database
+tdb -d postgres -dsn 'postgres://user:pass@localhost:5432/shop?sslmode=disable'
+tdb -d mysql    -dsn 'user:pass@tcp(localhost:3306)/shop'
+tdb -lang zh-Hans                        # force Simplified Chinese</code></pre>
+      <p class="muted">Press <kbd>F5</kbd> to run, <kbd>F1</kbd> for key bindings and <kbd>F2</kbd> for settings.</p>
+    </div>
+
+    <div class="keys" aria-label="Essential key bindings">
+      <div class="key"><kbd>F5</kbd><span>Run</span></div>
+      <div class="key"><kbd>F6</kbd><span>Explain</span></div>
+      <div class="key"><kbd>Ctrl+Space</kbd><span>Complete</span></div>
+      <div class="key"><kbd>F7</kbd><span>Export</span></div>
+      <div class="key"><kbd>Ctrl+F</kbd><span>Find</span></div>
+      <div class="key"><kbd>F9</kbd><span>Commit</span></div>
+      <div class="key"><kbd>F11</kbd><span>Rollback</span></div>
+      <div class="key"><kbd>F1</kbd><span>Help</span></div>
+    </div>
+  </section>
+
+  <section id="databases" class="section wrap">
+    <div class="section-head">
+      <h2>Four drivers, one interface.</h2>
+      <p>Identifiers are quoted per dialect and statements are cancelable across all SQL drivers.</p>
+    </div>
+
+    <div class="grid-4 db-grid">
+      <article class="db-card">
+        <h3>PostgreSQL</h3>
+        <p>Schemas, tables, views, materialized views, functions, procedures, triggers, indexes and sequences. SSL modes, <code>search_path</code> default schema.</p>
+        <span class="tag">pgx v5</span>
+      </article>
+      <article class="db-card">
+        <h3>MySQL</h3>
+        <p>Tables, views, routines, triggers, functional and multi-valued indexes, generated columns, JSON and TLS modes.</p>
+        <span class="tag">MySQL 8+</span>
+      </article>
+      <article class="db-card">
+        <h3>MariaDB</h3>
+        <p>The MySQL driver and dialect, plus system-versioned tables and sequences.</p>
+        <span class="tag">MariaDB 11+</span>
+      </article>
+      <article class="db-card">
+        <h3>SQLite</h3>
+        <p>Pure-Go <code>modernc.org/sqlite</code>: tables, views, triggers, indexes, generated columns and attached databases. No CGO.</p>
+        <span class="tag">no CGO</span>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <span class="brand-mark">tdb<span class="brand-caret">_</span></span>
+      <p class="muted">Apache License 2.0 · see <a href="https://github.com/p-v-q/tdb/blob/main/LICENSE">LICENSE</a> and <a href="https://github.com/p-v-q/tdb/blob/main/NOTICE">NOTICE</a>.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Project links">
+      <a href="https://github.com/p-v-q/tdb">GitHub</a>
+      <a href="https://github.com/p-v-q/tdb/releases">Releases</a>
+      <a href="https://github.com/p-v-q/tdb#documentation">Documentation</a>
+      <a href="https://github.com/p-v-q/tdb/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/p-v-q/tdb/blob/main/CONTRIBUTING.md">Contributing</a>
+    </nav>
+  </div>
+  <div class="wrap footer-note">
+    <p class="muted">TDB is pre-1.0: settings are versioned, but CLI and UI details may still change.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    function legacyCopy(text) {
+      return new Promise(function (resolve, reject) {
+        var area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.top = "-1000px";
+        document.body.appendChild(area);
+        area.select();
+        var ok = false;
+        try {
+          ok = document.execCommand("copy");
+        } catch (error) {
+          ok = false;
+        }
+        document.body.removeChild(area);
+        if (ok) {
+          resolve();
+        } else {
+          reject(new Error("copy failed"));
+        }
+      });
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+      return legacyCopy(text);
+    }
+
+    function flash(button, label, ok) {
+      if (!button.dataset.label) {
+        button.dataset.label = button.textContent;
+      }
+      button.textContent = label;
+      button.classList.toggle("is-copied", ok);
+      button.classList.toggle("is-failed", !ok);
+      window.setTimeout(function () {
+        button.textContent = button.dataset.label;
+        button.classList.remove("is-copied", "is-failed");
+      }, 1600);
+    }
+
+    document.querySelectorAll("[data-copy]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var code = button.parentElement.querySelector("code");
+        var text = code ? code.textContent.trim() : "";
+        if (!text) {
+          return;
+        }
+        copyText(text).then(
+          function () {
+            flash(button, "Copied", true);
+          },
+          function () {
+            flash(button, "Copy failed", false);
+          }
+        );
+      });
+    });
+  })();
+</script>
+</body>
+</html>
